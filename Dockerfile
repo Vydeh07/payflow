@@ -1,11 +1,11 @@
-FROM golang:1.22-alpine AS builder
+FROM golang:1.23-alpine AS builder
 
 WORKDIR /app
 COPY go.mod go.sum ./
-RUN go mod download
+RUN GOFLAGS=-mod=mod GOTOOLCHAIN=auto go mod download
 
 COPY . .
-RUN go build -o server cmd/server/main.go
+RUN GOTOOLCHAIN=auto go build -o server cmd/server/main.go
 
 FROM alpine:latest
 WORKDIR /app
